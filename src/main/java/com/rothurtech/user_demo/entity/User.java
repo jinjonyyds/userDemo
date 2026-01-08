@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "users")
 public class User {
     @Id
-    private String id; // MongoDB uses String for id
+    private String id; // MongoDB uses String for Objectid
     private String name;
     private int age;
     private double salary;
