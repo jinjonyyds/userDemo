@@ -2,6 +2,7 @@ package com.rothurtech.user_demo.controller;
 
 import com.rothurtech.user_demo.entity.User;
 import com.rothurtech.user_demo.repository.UserRepository;
+import com.rothurtech.user_demo.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,43 +12,39 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final UserService service;
 
 
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    // Create
-    @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userRepository.save(user);
+    public UserController(UserService service) {
+        this.service = service;
     }
 
     // get all users
     @GetMapping
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        return service.getAll();
     }
 
     // get by Id
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable String id) {
-        return userRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public User getUserById(@PathVariable String id) {
+        return service.getUserById(id);
     }
 
     // Update
     @PutMapping("/{id}")
     public User updateUser(@PathVariable String id, @RequestBody User userDetails) {
-        userDetails.setId(id);
-        return userRepository.save(userDetails);
+        return service.update(id, userDetails);
+    }
+    // Create
+    @PostMapping
+    public User createUser(@RequestBody User user) {
+        return service.create(user);
     }
 
     // Delete
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable String id) {
-        userRepository.deleteById(id);
+        service.delete(id);
     }
 }
