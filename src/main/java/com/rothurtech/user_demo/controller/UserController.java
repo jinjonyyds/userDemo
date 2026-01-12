@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/api/users")
@@ -59,6 +60,12 @@ public class UserController {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/async-test/{id}")
+    public CompletableFuture<String> asyncTest(@PathVariable String id) throws InterruptedException {
+        return service.processUser(id);
+    }
+
 
 
 }
